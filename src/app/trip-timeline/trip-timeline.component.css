@@ -1,0 +1,17 @@
+.form {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .timeline-container {
+    overflow-x: auto;
+    border: 1px solid #eee;
+    padding: 10px;
+    max-width: 100%;
+  }
+  
+  .timeline {
+    height: 150px;
+  }
+  

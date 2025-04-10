@@ -1,0 +1,80 @@
+<form (ngSubmit)="addTrip()" class="form">
+    <input [(ngModel)]="start" name="start" placeholder="Start Point" required />
+    <input [(ngModel)]="end" name="end" placeholder="End Point" required />
+    <button type="submit">Add Trip</button>
+  </form>
+  
+  <div class="timeline-container">
+    <svg class="timeline" [attr.width]="trips.length * 180" height="150">
+      <ng-container *ngFor="let trip of trips; let i = index">
+        <g [attr.transform]="'translate(' + (i * 180) + ', 0)'">
+          <circle
+            [attr.cx]="10"
+            [attr.cy]="isRepeated(i) ? 110 : 50"
+            r="5"
+            [attr.fill]="isRepeated(i) ? '#ffa500' : '#3366cc'"
+          />
+          <text
+            [attr.x]="0"
+            [attr.y]="isRepeated(i) ? 140 : 80"
+            text-anchor="start"
+            font-size="12"
+            fill="#555"
+          >
+            {{ getCode(trip.from) }} - {{ getCode(trip.to) }}
+          </text>
+  
+          <ng-container *ngIf="i < trips.length - 1">
+            <ng-container *ngIf="isRepeated(i + 1)">
+              <!-- Curved line for Level 2 repeated trip -->
+              <path
+                d="M 10 110 Q 90 60 170 110"
+                stroke="#ffa500"
+                fill="transparent"
+                stroke-width="2"
+              />
+            </ng-container>
+  
+            <ng-container *ngIf="!isRepeated(i + 1)">
+              <ng-container *ngIf="isContinued(i + 1)">
+                <!-- Straight line for continued trip -->
+                <line
+                  x1="10"
+                  y1="50"
+                  x2="170"
+                  y2="50"
+                  stroke="#3366cc"
+                  stroke-width="2"
+                />
+              </ng-container>
+              <ng-container *ngIf="!isContinued(i + 1)">
+                <!-- Curved arrow for disconnected trip -->
+                <path
+                  d="M 10 50 Q 90 0 170 50"
+                  stroke="orange"
+                  fill="transparent"
+                  stroke-width="2"
+                  marker-end="url(#arrowhead)"
+                />
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </g>
+      </ng-container>
+  
+      <!-- Arrowhead definition -->
+      <defs>
+        <marker
+          id="arrowhead"
+          markerWidth="10"
+          markerHeight="7"
+          refX="10"
+          refY="3.5"
+          orient="auto"
+        >
+          <polygon points="0 0, 10 3.5, 0 7" fill="orange" />
+        </marker>
+      </defs>
+    </svg>
+  </div>
+  
